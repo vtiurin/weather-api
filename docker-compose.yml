@@ -1,0 +1,27 @@
+version: '3.8'
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    #    working_dir: src
+    volumes:
+      - ./:/src
+    ports:
+      - "8080:8080"
+    command: php -S 0.0.0.0:8080 public/index.php
+    container_name: weather_api_1
+    depends_on:
+      - database
+  database:
+    image: postgres
+    container_name: database
+    restart: unless-stopped
+    environment:
+      POSTGRES_PASSWORD: secret
+      POSTGRES_DB: lumen_docker
+    volumes:
+      - ./postgres-data:/var/lib/postgresql/data
+    ports:
+      - '5444:5432'
+
